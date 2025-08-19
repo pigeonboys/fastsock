@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+    app:
+        build: .
+        ports:
+            - '${WEBSOCKET_PORT}:${WEBSOCKET_PORT}'
+        environment:
+            - WEBSOCKET_PORT=${WEBSOCKET_PORT}
+            - WEBSOCKET_PING_INTERVAL=${WEBSOCKET_PING_INTERVAL}
+            - REDIS_HOST=${REDIS_HOST}
+            - REDIS_PORT=${REDIS_PORT}
+            - REDIS_DB=${REDIS_DB}
+            - REDIS_PREFIX=${REDIS_PREFIX}
+            - REMOTE_URL=${REMOTE_URL}
+            - REMOTE_HEADERS=${REMOTE_HEADERS}
+            - LOG_LEVEL=${LOG_LEVEL}
+        depends_on:
+            - redis
+        volumes:
+            - ./src:/app/src
+            - ./logs:/app/logs
+
+    redis:
+        image: redis:7-alpine
+        ports:
+            - '${REDIS_PORT}:${REDIS_PORT}'
